@@ -8,7 +8,7 @@ async fn create_wss_client(uri: String) -> Result<(), Box<dyn std::error::Error>
     let (ws_stream, _) = connect_async(uri).await?;
     let (mut write, mut read) = ws_stream.split();
     loop {
-        write.send(Message::Text("Ping".to_string())).await?;
+        write.send(Message::Text("1111111".to_string())).await?;
         sleep(time::Duration::from_secs(1)).await;
         while let Some(Ok(message)) = read.next().await {
             println!("Received message: {:?}", message);
