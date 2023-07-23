@@ -27,3 +27,7 @@ hex = "0.4.2"
 
 #base64
 base64 = "0.21.2"
+
+#protobuf 
+protobuf-codegen-pure = "2.28.0"
+protobuf = "3.2.0"
