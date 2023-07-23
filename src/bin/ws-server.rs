@@ -41,7 +41,12 @@ async fn main() {
                         // 收到pong响应当前连接正常
                         println!("Pong:{:?}",pong);
                     }
+                    Ok(Message::Frame(_frame)) => {
+                        // 猜测可能是保留桢
+                        // println!("Frame:{:?}",_frame);
+                    }
                     Err(e) => {
+                        // 包括客户端异常断开
                         eprintln!("WebSocket 错误: {}", e);
                         break;
                     }
