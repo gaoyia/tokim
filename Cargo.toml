@@ -31,3 +31,6 @@ base64 = "0.21.2"
 #protobuf 
 protobuf-codegen-pure = "2.28.0"
 protobuf = "3.2.0"
+
+#http
+hyper = { version = "0.14.27", features = ["full"] }
