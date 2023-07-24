@@ -1296,6 +1296,7 @@ dependencies = [
  "protobuf 3.2.0",
  "protobuf-codegen-pure",
  "serde",
+ "serde_json",
  "sha2",
  "tokio",
  "tokio-tungstenite",

@@ -1,3 +1,5 @@
+use hyper::header::CONTENT_TYPE;
+use hyper::http::HeaderValue;
 use hyper::service::{make_service_fn, service_fn};
 use hyper::{Body, Request, Response, Server};
 
@@ -5,6 +7,14 @@ use hyper::Method;
 use hyper::StatusCode;
 use hyper::Error;
 
+use serde::{Serialize, Deserialize};
+
+#[derive(Debug, Deserialize, Serialize)]
+struct User {
+    id: u32,
+    username: String,
+    email: String,
+}
 
 #[tokio::main]
 async fn main() {
@@ -45,12 +55,41 @@ async fn handle_request(req: Request<Body>) -> Result<Response<Body>, Error> {
                 .unwrap();
             Ok(res)
         },
+        (&Method::POST, "/user") => {
+            // 接收 JSON 请求并返回相同 JSON 数据
+            let user_data = hyper::body::to_bytes(req.into_body()).await?;
+            let user_result = serde_json::from_slice::<User>(&user_data);
+            
+            match user_result {
+                Ok(user) => {
+                    let response_body = serde_json::to_vec(&user).unwrap();
+                    
+                    let mut response = Response::default();
+                    *response.body_mut() = Body::from(response_body);
+                    response.headers_mut().insert(CONTENT_TYPE, HeaderValue::from_static("application/json"));
+                    
+                    Ok(response)
+                },
+                Err(err) => {
+                    let error_msg = format!(
+                        r#"{{"code": "{}","msg": {}}}"#,
+                        400,err
+                    );
+                    let error_response = Response::builder()
+                        .status(400)
+                        .body(Body::from(error_msg))
+                        .unwrap();
+                    Ok(error_response)
+                }
+            }
+        },
         _ => {
-            // 处理其他未知路由请求
-            Ok(Response::builder()
-                .status(StatusCode::NOT_FOUND)
+            // 未知路由或其他请求处理
+            let response = Response::builder()
+                .status(404)
                 .body(Body::empty())
-                .unwrap())
+                .unwrap();
+            Ok(response)
         }
     }
 }
