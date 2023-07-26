@@ -22,10 +22,10 @@ async fn main() {
 
     let make_svc = make_service_fn(|_conn| {
         async {
-        Ok::<_, Error>(service_fn(move |req| {
-            handle_request(req)
-        }))
-    }
+            Ok::<_, Error>(service_fn(move |req| {
+                handle_request(req)
+            }))
+        }
     });
 
     let server = Server::bind(&addr).serve(make_svc);
