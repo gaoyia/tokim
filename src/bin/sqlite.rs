@@ -53,6 +53,10 @@ fn update_msg(conn: &Connection, msg: &Msg) -> Result<()> {
 }
 
 // 删除数据
+fn delete_msg(conn: &Connection, id: i32) -> Result<()> {
+    conn.execute("DELETE FROM msg WHERE id = ?1", [id])?;
+    Ok(())
+}
 
 fn main() -> Result<()> {
     let conn = Connection::open_in_memory()?;
@@ -106,7 +110,7 @@ fn main() -> Result<()> {
     }
 
     // 删除消息
-    // delete_msg(&conn, 2)?;
+    delete_msg(&conn, 2)?;
 
     // 查询删除后的消息
     let remaining_msgs = query_msgs(&conn, None, None)?;
