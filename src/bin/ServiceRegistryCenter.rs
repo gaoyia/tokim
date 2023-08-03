@@ -9,7 +9,7 @@ struct Service {
 struct ServiceRegistry {
     services: HashMap<String, Service>,
 }
- 
+
 impl ServiceRegistry {
     fn new() -> Self {
         Self {
